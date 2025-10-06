@@ -1,0 +1,1 @@
+Rodar o Application pelo IntelliJ.
