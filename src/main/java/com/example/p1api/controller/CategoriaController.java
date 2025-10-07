@@ -12,15 +12,14 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 @RestController
 @RequestMapping(value = "/categoria", produces = "application/json")
 public class CategoriaController {
 
     @Autowired
-    private CategoriaService categoriaService;
+    private final CategoriaService categoriaService;
 
     private List<Categoria> categorias;
 
@@ -31,13 +30,25 @@ public class CategoriaController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Categoria>> listarCategorias() {
-        List<Categoria> categorias = categoriaService.listarTodos();
-        return ResponseEntity.ok(categorias);
+    public ResponseEntity<Object> listarOuFiltrarCategorias(@RequestParam(value = "nome", required = false) String nome) {
+        try {
+            Object categoriasRetorno;
+            List<Categoria> categoriaList;
+            if (nome != null && !nome.trim().isEmpty()) {
+                categoriasRetorno = categoriaService.buscarPorNome(nome);
+            }
+            else {
+                categoriasRetorno = categorias;
+            }
+            return ResponseEntity.ok(categoriasRetorno);
+        }
+        catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
     }
 
     @GetMapping(path = "{id}/produtos")
-    public ResponseEntity<List<Produto>> listarProdutos(@PathVariable("id") Long id) {
+    public ResponseEntity<List<Produto>> listarProdutosPorIdCategoria(@PathVariable("id") Long id) {
         List<Produto> produtos = categoriaService.listarProdutos(id);
         return ResponseEntity.ok(produtos);
     }

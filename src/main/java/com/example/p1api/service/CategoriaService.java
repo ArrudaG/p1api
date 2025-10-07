@@ -12,6 +12,7 @@ import java.util.Optional;
 public class CategoriaService {
     public static final List<Categoria> categorias = new ArrayList<>();
     private Long nextId = 1L;
+    Categoria cat;
 
     public CategoriaService() {}
 
@@ -25,6 +26,12 @@ public class CategoriaService {
     public Optional<Categoria> buscarPorId(Long id) {
         return categorias.stream()
                 .filter(p -> p.getId().equals(id))
+                .findFirst();
+    }
+
+    public Optional<Categoria> buscarPorNome(String nome) {
+        return categorias.stream()
+                .filter(p -> p.getNome().equals(nome))
                 .findFirst();
     }
 
