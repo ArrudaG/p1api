@@ -1,6 +1,5 @@
 package com.example.p1api.model;
 
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -8,6 +7,8 @@ public class Categoria {
     private Long id;
     private String nome;
     private List<Produto> produtoList;
+
+    public Categoria(){}
 
     public Categoria(Long id, String nome) {
         this.id = id;
@@ -23,6 +24,7 @@ public class Categoria {
     public void setId(Long id) {
         this.id = id;
     }
+
     public String getNome() {
         return nome;
     }
@@ -37,10 +39,6 @@ public class Categoria {
 
     public List<Produto> getProdutoList() {
         return produtoList;
-    }
-
-    public void addProduto(Produto produto) {
-        this.produtoList.add(produto);
     }
 }
 

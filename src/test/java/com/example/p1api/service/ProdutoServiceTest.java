@@ -6,10 +6,10 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class ProdutoServicesTest {
+class ProdutoServiceTest {
 
     CategoriaService categoriaService = new CategoriaService();
-    ProdutoServices produtoServices = new ProdutoServices();
+    ProdutoService produtoService = new ProdutoService();
 
     @Test
     public void deveRetornarListaDeIds() {
@@ -19,8 +19,8 @@ class ProdutoServicesTest {
         categoriaService.criar(laticinios);
         Produto leite = new Produto(0L, "Leite", 9.99, 2L);
         Produto macarrao = new Produto(0L, "Macarrao", 5.99, 1L);
-        produtoServices.criar(leite);
-        produtoServices.criar(macarrao);
+        produtoService.criar(leite);
+        produtoService.criar(macarrao);
         assertEquals("Leite", categoriaService.listarProdutos(2L));
     }
 

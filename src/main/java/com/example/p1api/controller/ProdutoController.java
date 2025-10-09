@@ -4,13 +4,14 @@ import com.example.p1api.dtos.ProdutoRequestDto;
 import com.example.p1api.dtos.ProdutoResponseDto;
 import com.example.p1api.mapper.ProdutoMapper;
 import com.example.p1api.model.Produto;
-import com.example.p1api.service.ProdutoServices;
+import com.example.p1api.service.ProdutoService;
+
 import jakarta.validation.Valid;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -18,14 +19,10 @@ import java.util.Optional;
 @RestController
 @RequestMapping (value = "/produto" , produces = "application/json")
 public class ProdutoController {
-    private final ProdutoServices produtoService;
-    private List<Produto> produtos;
+    private final ProdutoService produtoService;
 
-    public ProdutoController(ProdutoServices produtoService) {
+    public ProdutoController(ProdutoService produtoService) {
         this.produtoService = produtoService;
-        produtos = new ArrayList<>();
-        produtos = produtoService.listarTodos();
-
     }
 
     @GetMapping
@@ -37,8 +34,7 @@ public class ProdutoController {
     @PostMapping (consumes = "application/json")
     public ResponseEntity<ProdutoResponseDto> criarProduto(@RequestBody @Valid ProdutoRequestDto produtoDTO){
 
-        Long newId = (long) (produtos.size() + 1);
-        Produto produto = ProdutoMapper.toEntity(produtoDTO, newId);
+        Produto produto = ProdutoMapper.toEntity(produtoDTO, null);
         Produto novoProduto = produtoService.criar(produto);
         ProdutoResponseDto responseDTO = ProdutoMapper.toDto(novoProduto);
 
@@ -55,9 +51,15 @@ public class ProdutoController {
         return produtoService.atualizar(id, produtoAtualizado);
     }
 
-    @DeleteMapping("<id>")
-    public void deletarProduto(@RequestParam Long id) {
-        produtoService.deletar(id);
+    @DeleteMapping("{id}")
+    public ResponseEntity<Void> deletarProduto(@PathVariable("id") Long id) {
+        boolean removido = produtoService.deletar(id);
+        if (removido) {
+            return ResponseEntity.noContent().build();
+        }
+        else {
+            return ResponseEntity.notFound().build();
+        }
     }
 
 }

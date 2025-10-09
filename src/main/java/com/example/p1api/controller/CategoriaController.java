@@ -25,8 +25,6 @@ public class CategoriaController {
 
     public CategoriaController(CategoriaService categoriaService) {
         this.categoriaService = categoriaService;
-        categorias = new ArrayList<>();
-        categorias = categoriaService.listarTodos();
     }
 
     @GetMapping
@@ -38,7 +36,7 @@ public class CategoriaController {
                 categoriasRetorno = categoriaService.buscarPorNome(nome);
             }
             else {
-                categoriasRetorno = categorias;
+                categoriasRetorno = categoriaService.listarTodos();
             }
             return ResponseEntity.ok(categoriasRetorno);
         }
@@ -56,8 +54,7 @@ public class CategoriaController {
     @PostMapping(consumes = "application/json")
     public ResponseEntity<CategoriaResponseDto> criarCategoria(@RequestBody @Valid CategoriaRequestDto categoriaDto){
 
-        Long newId = (long) (categorias.size() + 1);
-        Categoria categoria = CategoriaMapper.toEntity(categoriaDto, newId);
+        Categoria categoria = CategoriaMapper.toEntity(categoriaDto, null);
         Categoria novaCategoria = categoriaService.criar(categoria);
         CategoriaResponseDto responseDto = CategoriaMapper.toDto(novaCategoria);
 

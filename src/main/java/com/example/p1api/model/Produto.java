@@ -6,6 +6,8 @@ public class Produto {
     private double valor;
     private Long categoriaId;
 
+    public Produto() {}
+
     public Produto(Long id, String nome, double valor, Long categoriaId) {
         this.id = id;
         this.nome = nome;
@@ -38,7 +40,7 @@ public class Produto {
         this.valor = valor;
     }
 
-    public void setCategoriaId() {
+    public void setCategoriaId(Long categoriaId) {
         this.categoriaId = categoriaId;
     }
 
