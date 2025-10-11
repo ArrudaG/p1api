@@ -1,4 +1,4 @@
-Este documento descreve as correções e melhorias realizadas no projeto após a entrega inicial, detalhando as alterações feitas em cada parte do código.
+Este documento descreve as correções e melhorias realizadas no projeto após a entrega, detalhando as alterações feitas em cada parte do código.
 
 Parte 1: Corrigi o erro que impedia o funcionamento correto da requisição {id}/produtos, assim como também arrumei o problema de ter uma lista de produtos para todas as categorias.
 
