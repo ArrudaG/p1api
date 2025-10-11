@@ -1,16 +1,21 @@
 package com.example.p1api.dtos;
 
+import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 
 public class ProdutoRequestDto {
 
     @NotBlank ( message = "O nome não pode estar vazio")
+    @Size(min=2)
     private String nome;
 
-    @NotBlank ( message = "O valor não pode estar vazio")
+    @NotNull ( message = "O valor não pode estar vazio")
+    @DecimalMin("0.01")
     private double valor;
 
-    @NotBlank ( message = "O id da categoria não pode estar vazio")
+    @NotNull( message = "O id da categoria não pode estar vazio")
     private Long categoriaId;
 
     public String getNome() {

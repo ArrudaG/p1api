@@ -1,10 +1,13 @@
 package com.example.p1api.service;
 
+import com.example.p1api.dtos.CategoriaRequestDto;
 import com.example.p1api.model.Categoria;
 import com.example.p1api.model.Produto;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
@@ -48,18 +51,6 @@ public class CategoriaService {
         return categorias;
     }
 
-    public Optional<Categoria> atualizar(Long id, Categoria categoriaAtualizado) {
-        Optional<Categoria> categoriaExistenteOpt = buscarPorId(id);
-        if (categoriaExistenteOpt.isPresent()) {
-            Categoria categoriaExistente = categoriaExistenteOpt.get();
-            categoriaAtualizado.setId(id);
-            int index = categorias.indexOf(categoriaExistente);
-            categorias.set(index, categoriaAtualizado);
-            return Optional.of(categoriaAtualizado);
-        }
-        return Optional.empty();
-    }
-
     public void addProduto(Produto produto) {
         for (Categoria cat : categorias) {
             if (Objects.equals(cat.getId(), produto.getCategoriaId())) {
@@ -88,8 +79,8 @@ public class CategoriaService {
             if (Objects.equals(cat.getId(), produto.getCategoriaId())) {
                 cat.getProdutoList().removeIf(p -> Objects.equals(p.getId(), produto.getCategoriaId()));
                 salvarDados();
+                break;
             }
-            break;
         }
     }
 
@@ -114,4 +105,10 @@ public class CategoriaService {
         }
     }
 
+    public List<Categoria> listarOuFiltrar(String nome) {
+        if (nome == null || nome.trim().isEmpty()) {
+            return listarTodos();
+        }
+        return buscarPorNome(nome).map(List::of).orElse(List.of());
+    }
 }

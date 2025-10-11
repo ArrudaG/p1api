@@ -11,3 +11,5 @@ Resolução parte 2: No controller alterei o retorno para ResponseEntity<Object>
 Parte 3: Criei métodos de persistência que salvam as informações adicionadas pelas requisições POST, tanto para produtos quanto para categorias. Também fiz com que o método Delete de produto, além de deletar da list principal que é a de produtos, também remova da lista de produtos dentro da respectiva categoria.
 
 Resolução parte 3: Dentro de cada Service adicionei um método que, para salvar os dados, possui um nome de arquivo .json e utiliza o Mapper e o File. Para deletar adicionei um laço for que quando encontrar uma categoria com o mesmo id do idCategoria do produto, delete esse mesmo produto pegando a id dele como referência.
+
+Parte 4: Essa foi a parte em que tiveram mais alterações, porém todas as alterações pequenas e simples como, erros de IoC/DI, Status Codes corretos e validações nos DTOs. Por esse motivo não tenho como dizer exatamente o que foi mudado.

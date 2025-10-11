@@ -20,7 +20,7 @@ public class ProdutoService {
     private final ObjectMapper mapper = new ObjectMapper();
     private List<Produto> produtos = new ArrayList<>();
     private Long nextId = 1L;
-    private CategoriaService categoriaService = new CategoriaService();
+    private final CategoriaService categoriaService = new CategoriaService();
 
     public ProdutoService() {
         carregarDados();

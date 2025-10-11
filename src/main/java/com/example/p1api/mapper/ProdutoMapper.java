@@ -8,8 +8,8 @@ public final class ProdutoMapper {
     private ProdutoMapper() {
     }
 
-    public static Produto toEntity(ProdutoRequestDto dtoP, Long newId) {
-        Produto produto = new Produto(newId, dtoP.getNome(), dtoP.getValorUnitario(), dtoP.getCategoriaId());
+    public static Produto toEntity(ProdutoRequestDto dtoP) {
+        Produto produto = new Produto(null, dtoP.getNome(), dtoP.getValorUnitario(), dtoP.getCategoriaId());
         return produto;
     }
 

@@ -26,39 +26,48 @@ public class ProdutoController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Produto>> listarProdutos() {
-        List<Produto> produtos = produtoService.listarTodos();
-        return ResponseEntity.ok(produtos);
+    public ResponseEntity<?> listarProdutos() {
+        List<Produto> retorno = produtoService.listarTodos();
+        if (retorno.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).body("Não foi encontrado nenhum produto");
+        }
+        return ResponseEntity.ok(retorno);
     }
 
     @PostMapping (consumes = "application/json")
     public ResponseEntity<ProdutoResponseDto> criarProduto(@RequestBody @Valid ProdutoRequestDto produtoDTO){
-
-        Produto produto = ProdutoMapper.toEntity(produtoDTO, null);
+        Produto produto = ProdutoMapper.toEntity(produtoDTO);
         Produto novoProduto = produtoService.criar(produto);
         ProdutoResponseDto responseDTO = ProdutoMapper.toDto(novoProduto);
-
         return ResponseEntity.status(HttpStatus.CREATED).body(responseDTO);
     }
 
     @GetMapping("<id>")
-    public Optional<Produto> buscarProduto(@RequestParam Long id) {
-        return produtoService.buscarPorId(id);
+    public ResponseEntity<?> buscarProduto(@RequestParam Long id) {
+        Optional<Produto> retorno = produtoService.buscarPorId(id);
+        if (retorno.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).body("Não foi encontrado o produto com id = " + id);
+        }
+        return ResponseEntity.ok(retorno);
     }
 
-    @PutMapping("<id>")
-    public Optional<Produto> atualizarProduto(@RequestParam Long id, @RequestBody Produto produtoAtualizado) {
-        return produtoService.atualizar(id, produtoAtualizado);
+    @PutMapping(value = "<id>", consumes = "application/json")
+    public ResponseEntity<?> atualizarProduto(@RequestParam Long id, @RequestBody @Valid Produto produtoAtualizado) {
+        Optional<Produto> retorno = produtoService.atualizar(id, produtoAtualizado);
+        if (retorno.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Não foi possível atualizar o produto de id = " + id);
+        }
+        return ResponseEntity.ok(retorno);
     }
 
     @DeleteMapping("{id}")
     public ResponseEntity<Void> deletarProduto(@PathVariable("id") Long id) {
         boolean removido = produtoService.deletar(id);
         if (removido) {
-            return ResponseEntity.noContent().build();
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
         }
         else {
-            return ResponseEntity.notFound().build();
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
     }
 

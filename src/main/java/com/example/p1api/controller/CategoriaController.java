@@ -21,43 +21,33 @@ public class CategoriaController {
     @Autowired
     private final CategoriaService categoriaService;
 
-    private List<Categoria> categorias;
-
     public CategoriaController(CategoriaService categoriaService) {
         this.categoriaService = categoriaService;
     }
 
     @GetMapping
-    public ResponseEntity<Object> listarOuFiltrarCategorias(@RequestParam(value = "nome", required = false) String nome) {
-        try {
-            Object categoriasRetorno;
-            List<Categoria> categoriaList;
-            if (nome != null && !nome.trim().isEmpty()) {
-                categoriasRetorno = categoriaService.buscarPorNome(nome);
-            }
-            else {
-                categoriasRetorno = categoriaService.listarTodos();
-            }
-            return ResponseEntity.ok(categoriasRetorno);
+    public ResponseEntity<?> listarOuFiltrarCategorias(@RequestParam(value = "nome", required = false) String nome) {
+        List<Categoria> retorno = categoriaService.listarOuFiltrar(nome);
+        if (retorno.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).body("Categoria não encontrada: " + nome);
         }
-        catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-        }
+        return ResponseEntity.ok(retorno);
     }
 
     @GetMapping(path = "{id}/produtos")
-    public ResponseEntity<List<Produto>> listarProdutosPorIdCategoria(@PathVariable("id") Long id) {
-        List<Produto> produtos = categoriaService.listarProdutos(id);
-        return ResponseEntity.ok(produtos);
+    public ResponseEntity<?> listarProdutosPorIdCategoria(@PathVariable("id") Long id) {
+        List<Produto> retorno = categoriaService.listarProdutos(id);
+        if (retorno.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).body("Não foi encontrado nenhum produto na categoria: " + categoriaService.buscarPorId(id));
+        }
+        return ResponseEntity.ok(retorno);
     }
 
     @PostMapping(consumes = "application/json")
     public ResponseEntity<CategoriaResponseDto> criarCategoria(@RequestBody @Valid CategoriaRequestDto categoriaDto){
-
-        Categoria categoria = CategoriaMapper.toEntity(categoriaDto, null);
-        Categoria novaCategoria = categoriaService.criar(categoria);
-        CategoriaResponseDto responseDto = CategoriaMapper.toDto(novaCategoria);
-
-        return ResponseEntity.status(HttpStatus.CREATED).body(responseDto);
+        Categoria categoria = CategoriaMapper.toEntity(categoriaDto);
+        Categoria nova = categoriaService.criar(categoria);
+        CategoriaResponseDto response = CategoriaMapper.toDto(nova);
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 }

@@ -8,8 +8,8 @@ import com.example.p1api.model.Categoria;
 public final class CategoriaMapper {
     private CategoriaMapper() {}
 
-    public static Categoria toEntity (CategoriaRequestDto dtoC, Long newId){
-        Categoria categoria = new Categoria(newId, dtoC.getNome());
+    public static Categoria toEntity (CategoriaRequestDto dtoC){
+        Categoria categoria = new Categoria(null, dtoC.getNome());
         return categoria;
     }
 
